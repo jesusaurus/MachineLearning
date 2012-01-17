@@ -4,6 +4,7 @@ class Perceptron
         data = Hash.new #training data
         test = Hash.new #testing data
         w = Array.new(64) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
+        eta = 0.2
         epochs=0 #how many epochs have we trained on so far
         source=3 #look at class 3 vs 7
         target=7 #look at class 3 vs 7
@@ -29,16 +30,26 @@ class Perceptron
         #go through one epoch of training
 
         #train on what we are
+        data[source].shuffle!
         data[source].each do |values|
-            values.each do |value|
-                #do stuff
+            values.each_index do |i|
+                #our output should be > 0
+                if percept(values) < 0
+                    #change weight
+                    w[i] += eta * 2 * values[i]
+                end
             end
         end
 
         #train on what we are not
+        data[target].shuffle!
         data[target].each do |values|
             values.each do |value|
-                #do stuff
+                #our output should be < 0
+                if percept(values) > 0
+                    #change weight
+                    w[i] += eta * -2 * values[i]
+                end
             end
         end
         
@@ -51,7 +62,7 @@ class Perceptron
         w[1,w.size].each_index do |i|
             out += w[i] * inputs[i]
         end
-        return out
+        return out <=> 0
     end
 
     def train()
