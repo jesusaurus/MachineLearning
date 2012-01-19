@@ -8,7 +8,7 @@ class Perceptron
         @features = 64
         @w = Array.new(@features) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
         @eta = 0.2
-        @accuracy = 0
+        @accuracy = 0.0
         @epochs=0 #how many epochs have we trained on so far
         @sourceClass=3 #look at class 3 vs 7
         @targetClass=7 #look at class 3 vs 7
@@ -17,7 +17,7 @@ class Perceptron
     def readTest()
         #each line of the file contains 64 csv inputs, the 65th integer is the class
         File.open('optdigits/optdigits.tes').readlines.each do |line|
-            tmp = line.chomp.split(',')
+            tmp = line.chomp.split(',').map(&:to_i)
             if @training[tmp.last].nil?
                 @training[tmp.last] = []
             end
@@ -28,7 +28,7 @@ class Perceptron
     def readTrain()
         #each line of the file contains 64 csv inputs, the 65th integer is the class
         File.open('optdigits/optdigits.tra').readlines.each do |line|
-            tmp = line.chomp.split(',')
+            tmp = line.chomp.split(',').map(&:to_i)
             if @training[tmp.last].nil?
                 @training[tmp.last] = []
             end
@@ -81,15 +81,15 @@ class Perceptron
             end
         end
 
-        @epochs++
-        @accuracy = numRight / (@training[@sourceClass].size + @training[@targetClass].size)
+        @epochs += 1
+        @accuracy = numRight.to_f / (@training[@sourceClass].size + @training[@targetClass].size)
         puts "Accuracy after epoch #{@epochs}: #{@accuracy}\n"
         
     end
 
     def percept(inputs)
         #calculate output from inputs
-        out = w[0]
+        out = @w[0]
         @w[1,@w.size].each_index do |i|
             out += @w[i] * inputs[i]
         end
