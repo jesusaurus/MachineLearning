@@ -30,31 +30,48 @@ class Perceptron
     def epoch()
         #go through one epoch of training
 
+        numRight = 0
+
         #train on what we are
         @training[@sourceClass].shuffle!
         @training[@sourceClass].each do |input|
+            dirty = false
             input.each_index do |i|
                 #our output should be > 0
                 if percept(input) < 0
                     #change weight
                     @w[i] += @eta * 2 * input[i]
+                    dirty = true
                 end
+            end
+            if not dirty do
+                #we got this one right!
+                numRight++
             end
         end
 
         #train on what we are not
         @training[@targetClass].shuffle!
         @training[@targetClass].each do |input|
+            dirty = false
             input.each_index do |i|
                 #our output should be < 0
                 if percept(input) > 0
                     #change weight
                     @w[i] += @eta * -2 * input[i]
+                    dirty = true
                 end
             end
+            if not dirty do
+                #we got this one right!
+                numRight++
+            end
         end
-        
+
         @epochs++
+        @accuracy = numRight / (@training[@sourceClass].size + @training[@targetClass].size)
+        puts "Accuracy after epoch #{@epochs}: #{@accuracy}\n"
+        
     end
 
     def percept(inputs)
@@ -69,7 +86,9 @@ class Perceptron
     def train()
         readTrain()
         #loop until accurate enough
-        epoch()
+        while @accuracy < .9
+            epoch()
+        end
     end
 
     def test()
