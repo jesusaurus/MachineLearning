@@ -44,7 +44,7 @@ class Perceptron
                     dirty = true
                 end
             end
-            if not dirty do
+            if not dirty
                 #we got this one right!
                 numRight++
             end
@@ -62,7 +62,7 @@ class Perceptron
                     dirty = true
                 end
             end
-            if not dirty do
+            if not dirty
                 #we got this one right!
                 numRight++
             end
