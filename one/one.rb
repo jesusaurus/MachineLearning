@@ -1,3 +1,5 @@
+#!/usr/bin/ruby1.8
+
 class Perceptron
 
     def initialize()
@@ -6,6 +8,7 @@ class Perceptron
         @features = 64
         @w = Array.new(@features) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
         @eta = 0.2
+        @accuracy = 0
         @epochs=0 #how many epochs have we trained on so far
         @sourceClass=3 #look at class 3 vs 7
         @targetClass=7 #look at class 3 vs 7
@@ -13,17 +16,27 @@ class Perceptron
 
     def readTest()
         #each line of the file contains 64 csv inputs, the 65th integer is the class
-        File.open('optdigits/.tes').readlines.each do |line|
-            tmp = line.split(',')
+        File.open('optdigits/optdigits.tes').readlines.each do |line|
+            tmp = line.chomp.split(',')
+            if @training[tmp.last].nil?
+                @training[tmp.last] = []
+            end
             @testing[tmp.last] << tmp[0,@features]
         end
     end
 
     def readTrain()
         #each line of the file contains 64 csv inputs, the 65th integer is the class
-        File.open('optdigits/.tra').readlines.each do |line|
-            tmp = line.split(',')
+        File.open('optdigits/optdigits.tra').readlines.each do |line|
+            tmp = line.chomp.split(',')
+            if @training[tmp.last].nil?
+                @training[tmp.last] = []
+            end
             @training[tmp.last] << tmp[0,@features]
+        end
+        puts "Training data loaded.\n\n"
+        @training.each_key do |k|
+            puts "Class #{k} has #{@training[k].size} samples.\n"
         end
     end
 
@@ -46,7 +59,7 @@ class Perceptron
             end
             if not dirty
                 #we got this one right!
-                numRight++
+                numRight += 1
             end
         end
 
@@ -64,7 +77,7 @@ class Perceptron
             end
             if not dirty
                 #we got this one right!
-                numRight++
+                numRight += 1
             end
         end
 
