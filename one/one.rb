@@ -86,7 +86,7 @@ class Perceptron
     def train()
         readTrain()
         #loop until accurate enough
-        while @accuracy < .9
+        while @accuracy < 0.9
             epoch()
         end
     end
