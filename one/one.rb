@@ -1,20 +1,21 @@
 class Perceptron
 
     def initialize()
-        @data = Hash.new #training data
-        @test = Hash.new #testing data
-        @w = Array.new(64) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
+        @training = Hash.new #training data
+        @testing = Hash.new #testing data
+        @features = 64
+        @w = Array.new(@features) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
         @eta = 0.2
         @epochs=0 #how many epochs have we trained on so far
-        @source=3 #look at class 3 vs 7
-        @target=7 #look at class 3 vs 7
+        @sourceClass=3 #look at class 3 vs 7
+        @targetClass=7 #look at class 3 vs 7
     end
 
     def readTest()
         #each line of the file contains 64 csv inputs, the 65th integer is the class
         File.open('optdigits/.tes').readlines.each do |line|
             tmp = line.split(',')
-            @test[tmp.last] << tmp[0,64]
+            @testing[tmp.last] << tmp[0,@features]
         end
     end
 
@@ -22,7 +23,7 @@ class Perceptron
         #each line of the file contains 64 csv inputs, the 65th integer is the class
         File.open('optdigits/.tra').readlines.each do |line|
             tmp = line.split(',')
-            @data[tmp.last] << tmp[0,64]
+            @training[tmp.last] << tmp[0,@features]
         end
     end
 
@@ -30,25 +31,25 @@ class Perceptron
         #go through one epoch of training
 
         #train on what we are
-        @data[@source].shuffle!
-        @data[@source].each do |values|
-            values.each_index do |i|
+        @training[@sourceClass].shuffle!
+        @training[@sourceClass].each do |input|
+            input.each_index do |i|
                 #our output should be > 0
-                if percept(values) < 0
+                if percept(input) < 0
                     #change weight
-                    @w[i] += @eta * 2 * @values[i]
+                    @w[i] += @eta * 2 * input[i]
                 end
             end
         end
 
         #train on what we are not
-        @data[@target].shuffle!
-        @data[@target].each do |values|
-            values.each_index do |i|
+        @training[@targetClass].shuffle!
+        @training[@targetClass].each do |input|
+            input.each_index do |i|
                 #our output should be < 0
-                if percept(values) > 0
+                if percept(input) > 0
                     #change weight
-                    @w[i] += @eta * -2 * @values[i]
+                    @w[i] += @eta * -2 * input[i]
                 end
             end
         end
