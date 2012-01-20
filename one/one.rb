@@ -99,14 +99,32 @@ class Perceptron
     def train()
         readTrain()
         #loop until accurate enough
-        while @accuracy < 0.9
+        while @accuracy < 0.95
             epoch()
         end
     end
 
     def test()
         readTest()
-        #test
+
+        @testing[@sourceClass].each do |input|
+            if percept(input) < 0
+                #wrong
+            else
+                #right
+            end
+        end
+
+        @testing[@targetClass].each do |input|
+            if percept(input) > 0
+                #wrong
+            else
+                #right
+            end
+        end
+
+
+        results()
     end
 
 end
@@ -114,4 +132,5 @@ end
 if __FILE__ == $0
     perc = Perceptron.new
     perc.train()
+    perc.test()
 end
