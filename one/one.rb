@@ -10,6 +10,7 @@ class Perceptron
         @eta         = 0.2
         @accuracy    = 0.0
         @epochs      = 0 #how many epochs have we trained on so far
+        @epochGoal   = 5 #how many epochs to train for
         @sourceClass = 3 #look at class 3 vs 7
         @targetClass = 7 #look at class 3 vs 7
     end
@@ -98,8 +99,7 @@ class Perceptron
 
     def train()
         readTrain()
-        #loop until accurate enough
-        while @accuracy < 0.95
+        while @epochs < @epochGoal
             epoch()
         end
     end
