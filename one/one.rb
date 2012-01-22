@@ -3,15 +3,15 @@
 class Perceptron
 
     def initialize()
-        @training = Hash.new #training data
-        @testing = Hash.new #testing data
-        @features = 64
-        @w = Array.new(@features + 1) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
-        @eta = 0.2
-        @accuracy = 0.0
-        @epochs=0 #how many epochs have we trained on so far
-        @sourceClass=3 #look at class 3 vs 7
-        @targetClass=7 #look at class 3 vs 7
+        @training    = Hash.new #training data
+        @testing     = Hash.new #testing data
+        @features    = 64
+        @w           = Array.new(@features + 1) {|i| rand * 2 - 1} #weights: -1 <= w <= 1
+        @eta         = 0.2
+        @accuracy    = 0.0
+        @epochs      = 0 #how many epochs have we trained on so far
+        @sourceClass = 3 #look at class 3 vs 7
+        @targetClass = 7 #look at class 3 vs 7
     end
 
     def readTest()
