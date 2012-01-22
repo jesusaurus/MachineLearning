@@ -51,12 +51,14 @@ class Perceptron
         @training[@sourceClass].each do |input|
             dirty = false
             input.each_index do |i|
+                #process input
+                output = percept(input)
                 #our output should be > 0
-                if percept(input) < 0
-                    #change weight
-                    @w[i] += @eta * 2 * input[i]
+                if output < 0
                     dirty = true
                 end
+                #change weight
+                @w[i] += @eta * (1 - output) * input[i]
             end
             if not dirty
                 #we got this one right!
@@ -69,12 +71,14 @@ class Perceptron
         @training[@targetClass].each do |input|
             dirty = false
             input.each_index do |i|
+                #process input
+                output = percept(input)
                 #our output should be < 0
-                if percept(input) > 0
-                    #change weight
-                    @w[i] += @eta * -2 * input[i]
+                if output > 0
                     dirty = true
                 end
+                #change weight
+                @w[i] += @eta * (-1 - output) * input[i]
             end
             if not dirty
                 #we got this one right!
@@ -90,11 +94,13 @@ class Perceptron
 
     def percept(inputs)
         #calculate output from inputs
+        #the source class is > 0
+        #the target class is < 0
         out = @w[0]
         @w[1,@w.size].each_index do |i|
             out += @w[i] * inputs[i]
         end
-        return out <=> 0
+        return out 
     end
 
     def train()
