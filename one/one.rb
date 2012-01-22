@@ -18,8 +18,8 @@ class Perceptron
         #each line of the file contains 64 csv inputs, the 65th integer is the class
         File.open('optdigits/optdigits.tes').readlines.each do |line|
             tmp = line.chomp.split(',').map(&:to_i)
-            if @training[tmp.last].nil?
-                @training[tmp.last] = []
+            if @testing[tmp.last].nil?
+                @testing[tmp.last] = []
             end
             @testing[tmp.last] << tmp[0,@features]
         end
@@ -107,24 +107,40 @@ class Perceptron
     def test()
         readTest()
 
+        tPositives = 0
+        fPositives = 0
+        tNegatives = 0
+        fNegatives = 0
+
         @testing[@sourceClass].each do |input|
+            #Positives
             if percept(input) < 0
-                #wrong
+                #False
+                fPositives += 1
             else
-                #right
+                #True
+                tPositives += 1
             end
         end
 
         @testing[@targetClass].each do |input|
+            #Negatives
             if percept(input) > 0
-                #wrong
+                #False
+                fNegatives += 1
             else
-                #right
+                #True
+                tNegatives += 1
             end
         end
 
-
-        results()
+        #output results
+        puts "\n================\n"
+        puts "Confusion Matrix for #{@sourceClass} versus #{@targetClass}\n"
+        puts "\t\tTrue\t False\n"
+        puts "Positive\t#{tPositives}\t #{fPositives}\n"
+        puts "Negative\t#{tNegatives}\t #{fNegatives}\n"
+        puts "================\n"
     end
 
 end
