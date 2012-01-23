@@ -10,7 +10,7 @@ class Perceptron
         @eta         = 0.2
         @accuracy    = 0.0
         @epochs      = 0 #how many epochs have we trained on so far
-        @epochGoal   = 5 #how many epochs to train for
+        @epochGoal   = 1 #how many epochs to train for
         @sourceClass = source #the class we want to match
         @targetClass #the class we are testing against
 
