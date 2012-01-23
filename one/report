@@ -1,0 +1,301 @@
+=== Introduction ===
+
+I have created a perceptron in the Ruby language to correctly classify
+the data from the 'Optical Recognition of Handwritten Digits Data Set'
+from the UCI machine learning repository. The data is comprised of 64
+attributes.  The bias input of the perceptron is +1 and the 65 initial
+weights are assigned random values between +1 and -1.  These weights
+are updated with a stochastic gradient descent. The learning rate and
+the number of epochs to train for vary with the experiments.
+
+=== Experiment 1 ===
+
+The first experiment uses a learning rate of 0.2 and trains until a
+stable accuracy is achieved.  This takes 2 epochs to achieve an
+accuracy of 1.
+
+-- Confusion Matrices --
+
+Confusion Matrix for 0 versus 1
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 2
+    		True	 False
+Positive	178	        0
+Negative	177	        0
+
+Confusion Matrix for 0 versus 3
+    		True	 False
+Positive	178	        0
+Negative	183	        0
+
+Confusion Matrix for 0 versus 4
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 5
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 6
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 7
+    		True	 False
+Positive	178	        0
+Negative	179	        0
+
+Confusion Matrix for 0 versus 8
+    		True	 False
+Positive	178	        0
+Negative	174	        0
+
+Confusion Matrix for 0 versus 9
+    		True	 False
+Positive	178	        0
+Negative	180	        0
+
+=== Experiment 2 ===
+
+The second experiment also uses a learning rate of 0.2 and 
+overtrains for several epochs. A total of 5 epochs are run.
+
+No overfitting is seen.
+
+-- Confusion Matrices --
+
+Confusion Matrix for 0 versus 1
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 2
+    		True	 False
+Positive	178	        0
+Negative	177	        0
+
+Confusion Matrix for 0 versus 3
+    		True	 False
+Positive	178	        0
+Negative	183	        0
+
+Confusion Matrix for 0 versus 4
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 5
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 6
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 7
+    		True	 False
+Positive	178	        0
+Negative	179	        0
+
+Confusion Matrix for 0 versus 8
+    		True	 False
+Positive	178	        0
+Negative	174	        0
+
+Confusion Matrix for 0 versus 9
+    		True	 False
+Positive	178	        0
+Negative	180	        0
+
+=== Experiment 3 ===
+
+The third experiment also uses a learning rate of 0.2, and this
+time the perceptron is trained for a single epoch.  An average
+accuracy of 0.987 is achieved, and still all test cases are 100%
+accurate.
+
+This perceptron seems to learn too fast to be undertrained.
+
+-- Confusion Matrices --
+
+Confusion Matrix for 0 versus 1
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 2
+    		True	 False
+Positive	178	        0
+Negative	177	        0
+
+Confusion Matrix for 0 versus 3
+    		True	 False
+Positive	178	        0
+Negative	183	        0
+
+Confusion Matrix for 0 versus 4
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 5
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 6
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 7
+    		True	 False
+Positive	178	        0
+Negative	179	        0
+
+Confusion Matrix for 0 versus 8
+    		True	 False
+Positive	178	        0
+Negative	174	        0
+
+Confusion Matrix for 0 versus 9
+    		True	 False
+Positive	178	        0
+Negative	180	        0
+
+=== Experiment 4 ===
+
+For the fourth experiment, the learning rate is increased to 0.5.
+The perceptron is trained until the accuracy stabilizes.  This
+takes 2 epochs for an accuracy of 1 to be achieved.
+
+With this higher learning rate, the perceptron is more accurate
+after the first epoch -- always above .99 -- but this doesn't
+matter much since it doesn't effect how many epochs it takes to
+have an accuracy of 1.
+
+-- Confusion Matrices --
+
+Confusion Matrix for 0 versus 1
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 2
+    		True	 False
+Positive	178	        0
+Negative	177	        0
+
+Confusion Matrix for 0 versus 3
+    		True	 False
+Positive	178	        0
+Negative	183	        0
+
+Confusion Matrix for 0 versus 4
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 5
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 6
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 7
+    		True	 False
+Positive	178	        0
+Negative	179	        0
+
+Confusion Matrix for 0 versus 8
+    		True	 False
+Positive	178	        0
+Negative	174	        0
+
+Confusion Matrix for 0 versus 9
+    		True	 False
+Positive	178	        0
+Negative	180	        0
+
+=== Experiment 5 ===
+
+For the fifth experiment, the learning rate is decreased to 0.1.
+The perceptron is trained until the accuracy stabilizes.  This
+takes 2 epochs for an accuracy of 1 to be achieved.
+
+With this lower learning rate, the perceptron is less accurate
+after the first epoch, but again this doesn't matter much since it 
+doesn't effect how many epochs it takes to have an accuracy of 1.
+
+-- Confusion Matrices --
+
+Confusion Matrix for 0 versus 1
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 2
+    		True	 False
+Positive	178	        0
+Negative	177	        0
+
+Confusion Matrix for 0 versus 3
+    		True	 False
+Positive	178	        0
+Negative	183	        0
+
+Confusion Matrix for 0 versus 4
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 5
+    		True	 False
+Positive	178	        0
+Negative	182	        0
+
+Confusion Matrix for 0 versus 6
+    		True	 False
+Positive	178	        0
+Negative	181	        0
+
+Confusion Matrix for 0 versus 7
+    		True	 False
+Positive	178	        0
+Negative	179	        0
+
+Confusion Matrix for 0 versus 8
+    		True	 False
+Positive	178	        0
+Negative	174	        0
+
+Confusion Matrix for 0 versus 9
+    		True	 False
+Positive	178	        0
+Negative	180	        0
+
+===  Conclusion  ===
+
+First, I would like to note that an accuracy of 1 is considered
+stable before it is repeated, as this state contains weights that
+will not change -- the stochastic gradient descent has found a
+global minimum.
+
+Second, because the perceptron is so accurate, I have run it
+without training, and the results are much lower -- with an average
+near 0.5 as expected.
+
+The speed at which the perceptron learns is very surprising.  So much
+so, that I doubt the validity of my algorithm.
