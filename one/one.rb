@@ -176,7 +176,7 @@ class Perceptron
 
         @testing[@sourceClass].each do |input|
             #Positives
-            if percept(input) < 0
+            if percept(input) <= 0
                 #False
                 fPositives += 1
             else
