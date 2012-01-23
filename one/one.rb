@@ -2,7 +2,7 @@
 
 class Perceptron
 
-    def initialize()
+    def initialize(source=3)
         @training    = Hash.new #training data
         @testing     = Hash.new #testing data
         @features    = 64
@@ -11,8 +11,18 @@ class Perceptron
         @accuracy    = 0.0
         @epochs      = 0 #how many epochs have we trained on so far
         @epochGoal   = 5 #how many epochs to train for
-        @sourceClass = 3 #look at class 3 vs 7
-        @targetClass = 7 #look at class 3 vs 7
+        @sourceClass = source #the class we want to match
+        @targetClass #the class we are testing against
+
+        #read data from file
+        readTrain()
+        readTest()
+    end
+
+    def reset()
+        @w          = Array.new(@features + 1) {|i| rand * 2 - 1}
+        @accuracy   = 0.0
+        @epochs     = 0
     end
 
     def readTest()
@@ -35,10 +45,46 @@ class Perceptron
             end
             @training[tmp.last] << tmp[0,@features]
         end
-        puts "Training data loaded.\n\n"
-        @training.each_key do |k|
-            puts "Class #{k} has #{@training[k].size} samples.\n"
+    end
+    
+    def start()
+        #calculate the accuracy of the initial random weights
+        numRight = 0
+
+        @training[@sourceClass].each do |input|
+            dirty = false
+            input.each_index do |i|
+                #process input
+                output = percept(input)
+                #our output should be > 0
+                if output <= 0
+                    dirty = true
+                end
+            end
+            if not dirty
+                #we got this one right!
+                numRight += 1
+            end
         end
+
+        @training[@targetClass].each do |input|
+            dirty = false
+            input.each_index do |i|
+                #process input
+                output = percept(input)
+                #our output should be < 0
+                if output > 0
+                    dirty = true
+                end
+            end
+            if not dirty
+                #we got this one right!
+                numRight += 1
+            end
+        end
+
+        @accuracy = numRight.to_f / (@training[@sourceClass].size + @training[@targetClass].size)
+        puts "Initial accuracy of random weights: #{@accuracy}\n"
     end
 
     def epoch()
@@ -54,7 +100,7 @@ class Perceptron
                 #process input
                 output = percept(input)
                 #our output should be > 0
-                if output < 0
+                if output <= 0
                     dirty = true
                 end
                 #change weight
@@ -103,15 +149,22 @@ class Perceptron
         return out 
     end
 
-    def train()
-        readTrain()
+    def train(target)
+        @targetClass = target
+        puts "\n================\n"
+        puts "Training Data\n"
+        puts "================\n"
+        start()
         while @epochs < @epochGoal
             epoch()
         end
     end
 
-    def test()
-        readTest()
+    def test(target)
+        @targetClass = target
+        puts "\n================\n"
+        puts "Testing Data\n"
+        puts "================\n"
 
         tPositives = 0
         fPositives = 0
@@ -141,18 +194,20 @@ class Perceptron
         end
 
         #output results
-        puts "\n================\n"
         puts "Confusion Matrix for #{@sourceClass} versus #{@targetClass}\n"
         puts "\t\tTrue\t False\n"
         puts "Positive\t#{tPositives}\t #{fPositives}\n"
         puts "Negative\t#{tNegatives}\t #{fNegatives}\n"
-        puts "================\n"
     end
 
 end
 
 if __FILE__ == $0
-    perc = Perceptron.new
-    perc.train()
-    perc.test()
+    perc = Perceptron.new(0)
+    (1..9).each do |i|
+        puts "\n\n### 0 versus #{i} ###\n"
+        perc.reset()
+        perc.train(i)
+        perc.test(i)
+    end
 end
