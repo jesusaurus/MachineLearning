@@ -1,5 +1,9 @@
 #!/usr/bin/ruby1.8
 
+# Author:   K Jonathan Harker
+# Date:     January 2012
+# License:  New BSD
+
 class Perceptron
 
     def initialize(source=3)
