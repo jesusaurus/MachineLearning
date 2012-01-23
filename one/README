@@ -1,0 +1,14 @@
+=== Dependencies ===
+
+* Ruby 1.8
+
+=== Running the Code ===
+
+In order to run this perceptron you can simply:
+
+  `ruby one.rb`
+
+If you have multiple versions of ruby installed,
+you may need to run:
+
+  `ruby1.8 one.rb`
