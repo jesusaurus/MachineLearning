@@ -1,0 +1,144 @@
+
+
+### 0 versus 1 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.420915032679739
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 1
+		True	 False
+Positive	0	 178
+Negative	131	 51
+
+
+### 0 versus 2 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.5
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 2
+		True	 False
+Positive	177	 1
+Negative	1	 176
+
+
+### 0 versus 3 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.29281045751634
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 3
+		True	 False
+Positive	78	 100
+Negative	29	 154
+
+
+### 0 versus 4 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.321100917431193
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 4
+		True	 False
+Positive	11	 167
+Negative	116	 65
+
+
+### 0 versus 5 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.642287234042553
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 5
+		True	 False
+Positive	178	 0
+Negative	39	 143
+
+
+### 0 versus 6 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.452855245683931
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 6
+		True	 False
+Positive	6	 172
+Negative	160	 21
+
+
+### 0 versus 7 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.319790301441678
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 7
+		True	 False
+Positive	107	 71
+Negative	14	 165
+
+
+### 0 versus 8 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.576719576719577
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 8
+		True	 False
+Positive	67	 111
+Negative	117	 57
+
+
+### 0 versus 9 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.5
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 9
+		True	 False
+Positive	6	 172
+Negative	172	 8
