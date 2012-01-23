@@ -1,0 +1,189 @@
+
+
+### 0 versus 1 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.610457516339869
+Accuracy after epoch 1: 0.986928104575163
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 1
+		True	 False
+Positive	178	 0
+Negative	182	 0
+
+
+### 0 versus 2 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.5
+Accuracy after epoch 1: 0.988095238095238
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 2
+		True	 False
+Positive	178	 0
+Negative	177	 0
+
+
+### 0 versus 3 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.384313725490196
+Accuracy after epoch 1: 0.988235294117647
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 3
+		True	 False
+Positive	178	 0
+Negative	183	 0
+
+
+### 0 versus 4 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.179554390563565
+Accuracy after epoch 1: 0.986893840104849
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 4
+		True	 False
+Positive	178	 0
+Negative	181	 0
+
+
+### 0 versus 5 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.468085106382979
+Accuracy after epoch 1: 0.986702127659574
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 5
+		True	 False
+Positive	178	 0
+Negative	182	 0
+
+
+### 0 versus 6 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.254980079681275
+Accuracy after epoch 1: 0.9867197875166
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 6
+		True	 False
+Positive	178	 0
+Negative	181	 0
+
+
+### 0 versus 7 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.524246395806029
+Accuracy after epoch 1: 0.988204456094364
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 7
+		True	 False
+Positive	178	 0
+Negative	179	 0
+
+
+### 0 versus 8 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.494708994708995
+Accuracy after epoch 1: 0.986772486772487
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 8
+		True	 False
+Positive	178	 0
+Negative	174	 0
+
+
+### 0 versus 9 ###
+
+================
+Training Data
+================
+Initial accuracy of random weights: 0.606860158311346
+Accuracy after epoch 1: 0.986807387862797
+Accuracy after epoch 2: 1.0
+Accuracy after epoch 3: 1.0
+Accuracy after epoch 4: 1.0
+Accuracy after epoch 5: 1.0
+
+================
+Testing Data
+================
+Confusion Matrix for 0 versus 9
+		True	 False
+Positive	178	 0
+Negative	180	 0
