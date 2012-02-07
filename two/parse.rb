@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+Value = Struct.new(:score, :actual)
+
 pos = 0
 neg = 0
 
@@ -24,23 +26,27 @@ ARGV.each do |arg|
     tn = 0 #true negative
     fp = 0 #false positive
     fn = 0 #false negative
-    count = 0
 
+    values = Array.new
+
+    count = 0
     File.open(arg, 'r') do |file|
         while (line = file.gets)
-            tmp = line.split.first.to_f
-
-            if (tmp >= 0 && count < pos)
-                tp = tp + 1
-            elsif (count < pos)
-                fn = fn + 1
-            elsif (tmp >= 0)
-                fp = fp + 1
-            else
-                tn = tn + 1
-            end
-
+            a = count < pos ? 1 : -1
+            values << Value.new(line.split.first.to_f, a)
             count = count + 1
+        end
+    end
+
+    values.each do |value|
+        if (value.score >= 0 && value.actual > 0)
+            tp = tp + 1
+        elsif (value.actual > 0)
+            fn = fn + 1
+        elsif (value.score >= 0)
+            fp = fp + 1
+        else
+            tn = tn + 1
         end
     end
 
