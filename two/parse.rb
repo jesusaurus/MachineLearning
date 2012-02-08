@@ -22,11 +22,6 @@ ARGV.each do |arg|
     puts " *** #{arg} *** "
     puts
 
-    tp = 0 #true positive
-    tn = 0 #true negative
-    fp = 0 #false positive
-    fn = 0 #false negative
-
     values = Array.new
 
     count = 0
@@ -38,27 +33,41 @@ ARGV.each do |arg|
         end
     end
 
-    values.each do |value|
-        if (value.score >= 0 && value.actual > 0)
-            tp = tp + 1
-        elsif (value.actual > 0)
-            fn = fn + 1
-        elsif (value.score >= 0)
-            fp = fp + 1
-        else
-            tn = tn + 1
+    values.sort! {|a,b| a.score <=> b.score}
+
+    min = values.first.score
+    max = values.last.score
+    step = (max - min) / 20.0
+
+    (min..max).step(step).each do |threshold|
+
+        tp = 0 #true positive
+        tn = 0 #true negative
+        fp = 0 #false positive
+        fn = 0 #false negative
+
+        values.each do |value|
+            if (value.score >= threshold && value.actual > 0)
+                tp = tp + 1
+            elsif (value.actual > 0)
+                fn = fn + 1
+            elsif (value.score >= threshold)
+                fp = fp + 1
+            else
+                tn = tn + 1
+            end
         end
+
+        puts
+        puts " * Threshold: #{threshold} * "
+        puts
+        puts "Accuracy: #{(tp + tn).to_f / (tp + tn + fp + fn)}"
+        puts "Precision: #{tp.to_f / (tp + fp)}"
+        puts "Recall: #{tp.to_f / (tp + fn)}"
+        puts "True Positive Rate: #{tp.to_f / (tp + fn)}"
+        puts "False Positive Rate: #{fp.to_f / (fp + tn)}"
+
     end
 
-    puts "TP: #{tp}"
-    puts "FP: #{fp}"
-    puts "TN: #{tn}"
-    puts "FN: #{fn}"
-    puts
-    puts "Accuracy: #{(tp + tn).to_f / (tp + tn + fp + fn)}"
-    puts "Precision: #{tp.to_f / (tp + fp)}"
-    puts "Recall: #{tp.to_f / (tp + fn)}"
-    puts "True Positive Rate: #{tp.to_f / (tp + fn)}"
-    puts "False Positive Rate: #{fp.to_f / (fp + tn)}"
 end
 
