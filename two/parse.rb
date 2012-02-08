@@ -38,6 +38,9 @@ ARGV.each do |arg|
     min = values.first.score
     max = values.last.score
     step = (max - min) / 20.0
+    if (step == 0)
+        step = 1
+    end
 
     (min..max).step(step).each do |threshold|
 
