@@ -42,6 +42,8 @@ ARGV.each do |arg|
         step = 1
     end
 
+    puts "Threshold\tAccuracy\tPrecision\tRecall/TPR\tFPR"
+
     (min..max).step(step).each do |threshold|
 
         tp = 0 #true positive
@@ -61,14 +63,7 @@ ARGV.each do |arg|
             end
         end
 
-        puts
-        puts " * Threshold: #{threshold} * "
-        puts
-        puts "Accuracy: #{(tp + tn).to_f / (tp + tn + fp + fn)}"
-        puts "Precision: #{tp.to_f / (tp + fp)}"
-        puts "Recall: #{tp.to_f / (tp + fn)}"
-        puts "True Positive Rate: #{tp.to_f / (tp + fn)}"
-        puts "False Positive Rate: #{fp.to_f / (fp + tn)}"
+        puts "#{threshold}\t#{(tp + tn).to_f / (tp + tn + fp + fn)}\t#{tp.to_f / (tp + fp)}\t#{tp.to_f / (tp + fn)}\t#{fp.to_f / (fp + tn)}"
 
     end
 
