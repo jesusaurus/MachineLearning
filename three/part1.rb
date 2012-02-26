@@ -17,9 +17,6 @@ File.open('spambase.data').readlines.each do |line|
     $data[tmp.last] << tmp[0,$features]
 end
 
-puts "#{$data[0].size}"
-puts "#{$data[1].size}"
-
 $total = 0
 $data.each do |k, v|
     $total += v.size
@@ -32,25 +29,30 @@ $validation = Array.new
 
 $data.each do |c, datum|
     skip = 0
-    (1..(datum.size/$total*$fold)).each do |x|
-        tmp = rand * 8 + 1
+    range = $fold * datum.size
+    puts range
+    (1..range).each do |x|
+        tmp = (rand * 8 + 1).to_i
         (skip..skip+tmp-1).each do |i|
-            $training << datum[i]
+            $training << (datum[i] + [c])
         end
         skip += tmp
-        $validation << datum[skip]
+        $validation << (datum[skip] + [c])
     end
 end
 
-File.open('spam.train', 'w') do |file|
+puts $training.inspect
+
+File.open('spam-train.data', 'w') do |file|
     $training.each do |t|
-        file.write(t)
-        puts t.inspect
+        file.write(t.join(','))
+        file.write("\n")
     end
 end
-File.open('spam.val', 'w') do |file|
+File.open('spam-validate.data', 'w') do |file|
     $validation.each do |v|
-        file.write(v)
+        file.write(v.join(','))
+        file.write("\n")
     end
 end
 
