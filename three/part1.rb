@@ -30,7 +30,6 @@ $validation = Array.new
 $data.each do |c, datum|
     skip = 0
     range = $fold * datum.size
-    puts range
     (1..range).each do |x|
         tmp = (rand * 8 + 1).to_i
         (skip..skip+tmp-1).each do |i|
@@ -41,19 +40,18 @@ $data.each do |c, datum|
     end
 end
 
-puts $training.inspect
-
-File.open('spam-train.data', 'w') do |file|
+File.open('spam.data', 'w') do |file|
     $training.each do |t|
         file.write(t.join(','))
         file.write("\n")
     end
 end
-File.open('spam-validate.data', 'w') do |file|
+File.open('spam.test', 'w') do |file|
     $validation.each do |v|
         file.write(v.join(','))
         file.write("\n")
     end
 end
 
-output = `c4.5 ` 
+system('c4.5 -f spam | tail -n 7')
+system('c4.5 -f spam -u')
