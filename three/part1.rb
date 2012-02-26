@@ -22,8 +22,6 @@ $data.each do |k, v|
     $total += v.size
 end
 
-$weights = Array.new($total, 1.0 / $total)
-
 $training = Array.new
 $validation = Array.new
 
@@ -53,5 +51,4 @@ File.open('spam.test', 'w') do |file|
     end
 end
 
-system('c4.5 -f spam | tail -n 7')
-system('c4.5 -f spam -u')
+system('c4.5 -f spam -u | tail -n 23')
