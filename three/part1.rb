@@ -38,7 +38,7 @@ $data.each do |c, datum|
     end
 end
 
-File.open('spam.data', 'w') do |file|
+File.open('spam.train', 'w') do |file|
     $training.each do |t|
         file.write(t.join(','))
         file.write("\n")
