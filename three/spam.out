@@ -1,0 +1,23 @@
+
+Evaluation on training data (2300 items):
+
+	 Before Pruning           After Pruning
+	----------------   ---------------------------
+	Size      Errors   Size      Errors   Estimate
+
+	 355  127( 5.5%)    169  168( 7.3%)    (12.8%)   <<
+
+Evaluation on test data (2300 items):
+
+	 Before Pruning           After Pruning
+	----------------   ---------------------------
+	Size      Errors   Size      Errors   Estimate
+
+	 355  301(13.1%)    169  299(13.0%)    (12.8%)   <<
+
+
+	  (a)  (b)	<-classified as
+	 ---- ----
+	  726  180	(a): class 1
+	  119 1275	(b): class 0
+
