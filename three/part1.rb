@@ -9,7 +9,7 @@ $features = 57
 $fold = 0.1
 
 #each line of the file contains 57 csv inputs, the 58th integer is the class
-File.open('spambase.data').readlines.each do |line|
+File.open('spam.train').readlines.each do |line|
     tmp = line.chomp.split(',').map(&:to_i)
     if $data[tmp.last].nil?
         $data[tmp.last] = []
@@ -38,17 +38,17 @@ $data.each do |c, datum|
     end
 end
 
-File.open('spam.train', 'w') do |file|
+File.open('kfold.data', 'w') do |file|
     $training.each do |t|
         file.write(t.join(','))
         file.write("\n")
     end
 end
-File.open('spam.test', 'w') do |file|
+File.open('kfold.test', 'w') do |file|
     $validation.each do |v|
         file.write(v.join(','))
         file.write("\n")
     end
 end
 
-system('c4.5 -f spam -u | tail -n 23')
+system('c4.5 -f kfold -u | tail -n 23')

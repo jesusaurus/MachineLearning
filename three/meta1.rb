@@ -17,11 +17,11 @@ $train = Array.new
     output = `./part1.rb`
     print output
 
-    File.open('spam.trainacc').readlines.each do |t|
+    File.open('kfold.trainacc').readlines.each do |t|
         $train << t.to_f
     end
 
-    File.open('spam.testacc').readlines.each do |t|
+    File.open('kfold.testacc').readlines.each do |t|
         $test << t.to_f
     end
 end
