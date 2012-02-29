@@ -35,6 +35,9 @@ $training.each do |c, datum|
     end
 end
 
+$testAcc = Array.new
+$trainAcc = Array.new
+
 #run with only a fraction of the training data
 (0.1..1).step(0.1) do |n|
     use = Array.new
@@ -61,5 +64,32 @@ end
         end
     end
 
-    system('c4.5 -f kfold -u | tail -n 23')
+    `c4.5 -f kfold -u`
+    
+    File.open('kfold.trainacc').readlines.each do |acc|
+        puts acc
+        $trainAcc << acc.to_f
+    end
+
+    File.open('kfold.testacc').readlines.each do |acc|
+        puts acc
+        $testAcc << acc.to_f
+    end
+    puts
+
 end
+
+sum = 0
+$testAcc.map {|t| sum += t}
+avgTest = sum / $testAcc.size
+
+sum = 0
+$trainAcc.map {|t| sum += t}
+avgTrain = sum / $trainAcc.size
+
+puts
+puts "### Summary ###"
+puts
+puts "Average Training Accuracy: #{avgTrain.to_s}"
+puts "Average Testing Accuracy: #{avgTest.to_s}"
+puts
