@@ -21,15 +21,18 @@ File.open('spam.test').readlines.each do |line|
     $testing << tmp
 end
 
-$weights = Array.new($total, 1/$total.to_f)
+$weights = Array.new($training.size - 1, 1/($training.size - 1).to_f)
+
+$predictions = Hash.new
 
 $testAcc = Array.new
 $trainAcc = Array.new
 
 #run with only a fraction of the training data
 [5, 10, 20].each do |count|
-    (1..count) do |n|
+    (1..count).each do |n|
         use = Array.new
+        $predictions[n] = Array.new
 
         (0..($training.size * 0.3)).each do |i|
             #select samples based on weight
@@ -40,50 +43,69 @@ $trainAcc = Array.new
                 sum += $weights[pos]
                 pos += 1
             end
+            if $training[pos].nil?
+                puts "Bad position: " + pos.to_s
+            end
             use << $training[pos]
         end
 
-        File.open('kfold.data', 'w') do |file|
+        File.open("ada#{n}.data", 'w') do |file|
             use.each do |t|
+            begin
                 file.write(t.join(','))
                 file.write("\n")
+            rescue
+                puts
+                puts 'Ohnoez'
+                puts t.inspect
+                puts use.inspect
+                puts
+            end
             end
         end
 
-        File.open('kfold.test', 'w') do |file|
-            $validation.each do |v|
+        File.open("ada#{n}.test", 'w') do |file|
+            $testing.each do |v|
                 file.write(v.join(','))
                 file.write("\n")
             end
         end
 
-        `c4.5 -f kfold -u`
+        `c4.5 -f ada#{n}`
 
-        File.open('kfold.trainacc').readlines.each do |acc|
+        File.open("ada#{n}.predictions").readlines.each do |pred|
+            $predictions[n] << pred.chomp.split.map(&:to_i)
+        end
+        $predictions[n].shift #ignore the first line
+
+        File.open("ada#{n}.trainacc").readlines.each do |acc|
             puts acc
             $trainAcc << acc.to_f
         end
 
-        File.open('kfold.testacc').readlines.each do |acc|
-            puts acc
-            $testAcc << acc.to_f
+        wrong = 0
+        $predictions[n].each do |pred|
+            if pred[0] != pred[1]
+                wrong += 1
+            end
         end
-        puts
+        puts wrong.to_s + " misclassified"
+
+        #update weights
+        error = wrong.to_f / $training.size
+        alpha = 0.5 * Math.log( (1 - error) / error )
+        
+        sum = 0
+        $weights.each_index do |idx|
+            if $predictions[n][idx][0] != $predictions[n][idx][1]
+                $weights[idx] *= Math.exp(alpha)
+            end
+            sum += $weights[idx]
+        end
+        $weights.each { |w| w /= sum }
 
     end
 
-    sum = 0
-    $testAcc.map {|t| sum += t}
-    avgTest = sum / $testAcc.size
+    #ensemble
 
-    sum = 0
-    $trainAcc.map {|t| sum += t}
-    avgTrain = sum / $trainAcc.size
-
-    puts
-    puts "### Summary ###"
-    puts
-    puts "Average Training Accuracy: #{avgTrain.to_s}"
-    puts "Average Testing Accuracy: #{avgTest.to_s}"
-    puts
 end
