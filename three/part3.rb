@@ -21,20 +21,19 @@ File.open('spam.test').readlines.each do |line|
     $testing << tmp
 end
 
-$weights = Array.new($training.size - 1, 1/($training.size - 1).to_f)
-
-$predictions = Hash.new
-
 $testAcc = Array.new
 $trainAcc = Array.new
 
 #run with only a fraction of the training data
 [5, 10, 20].each do |count|
+    $weights = Array.new($training.size - 1, 1/($training.size - 1).to_f)
+    $predictions = Hash.new
+    
     (1..count).each do |n|
-        use = Array.new
         $predictions[n] = Array.new
+        use = Array.new
 
-        (0..($training.size * 0.3)).each do |i|
+        (0..$training.size).each do |i|
             #select samples based on weight
             pos = 0
             sum = 0
@@ -45,22 +44,15 @@ $trainAcc = Array.new
             end
             if $training[pos].nil?
                 puts "Bad position: " + pos.to_s
+            else
+                use << $training[pos]
             end
-            use << $training[pos]
         end
 
         File.open("ada#{n}.data", 'w') do |file|
             use.each do |t|
-            begin
                 file.write(t.join(','))
                 file.write("\n")
-            rescue
-                puts
-                puts 'Ohnoez'
-                puts t.inspect
-                puts use.inspect
-                puts
-            end
             end
         end
 
@@ -71,7 +63,7 @@ $trainAcc = Array.new
             end
         end
 
-        `c4.5 -f ada#{n}`
+        `c4.5 -f ada#{n} -u`
 
         File.open("ada#{n}.predictions").readlines.each do |pred|
             $predictions[n] << pred.chomp.split.map(&:to_i)
@@ -81,6 +73,11 @@ $trainAcc = Array.new
         File.open("ada#{n}.trainacc").readlines.each do |acc|
             puts acc
             $trainAcc << acc.to_f
+        end
+
+        File.open("ada#{n}.testacc").readlines.each do |acc|
+            puts acc
+            $testAcc << acc.to_f
         end
 
         wrong = 0
@@ -105,7 +102,5 @@ $trainAcc = Array.new
         $weights.each { |w| w /= sum }
 
     end
-
-    #ensemble
 
 end
