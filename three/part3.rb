@@ -4,25 +4,13 @@
 # Date:     February 2012
 # License:  New BSD
 
-$data = Hash.new
-$features = 57
-
 $training = Array.new
-$testing = Array.new
 
 #each line of the file contains 57 csv inputs, the 58th integer is the class
 File.open('spam.data').readlines.each do |line|
     tmp = line.chomp.split(',').map(&:to_i)
     $training << tmp
 end
-
-File.open('spam.test').readlines.each do |line|
-    tmp = line.chomp.split(',').map(&:to_i)
-    $testing << tmp
-end
-
-$testAcc = Array.new
-$trainAcc = Array.new
 
 #run with only a fraction of the training data
 [5, 10, 20].each do |count|
@@ -33,11 +21,9 @@ $trainAcc = Array.new
         $predictions[n] = Array.new
         use = Array.new
 
-        (0..$training.size).each do |i|
+        $training.each do ||
             #select samples based on weight
-            pos = 0
-            sum = 0
-            r = rand
+            sum, pos, r = 0, 0, rand
             while sum < r do
                 sum += $weights[pos]
                 pos += 1
@@ -56,29 +42,12 @@ $trainAcc = Array.new
             end
         end
 
-        File.open("ada#{n}.test", 'w') do |file|
-            $testing.each do |v|
-                file.write(v.join(','))
-                file.write("\n")
-            end
-        end
-
-        `c4.5 -f ada#{n} -u`
+        puts `c4.5 -f ada#{n} -u | tail -n 23`
 
         File.open("ada#{n}.predictions").readlines.each do |pred|
             $predictions[n] << pred.chomp.split.map(&:to_i)
         end
-        $predictions[n].shift #ignore the first line
-
-        File.open("ada#{n}.trainacc").readlines.each do |acc|
-            puts acc
-            $trainAcc << acc.to_f
-        end
-
-        File.open("ada#{n}.testacc").readlines.each do |acc|
-            puts acc
-            $testAcc << acc.to_f
-        end
+        $predictions[n].shift.compact #ignore the first line
 
         wrong = 0
         $predictions[n].each do |pred|
@@ -91,7 +60,7 @@ $trainAcc = Array.new
         #update weights
         error = wrong.to_f / $training.size
         alpha = 0.5 * Math.log( (1 - error) / error )
-        
+
         sum = 0
         $weights.each_index do |idx|
             if $predictions[n][idx][0] != $predictions[n][idx][1]
@@ -99,8 +68,40 @@ $trainAcc = Array.new
             end
             sum += $weights[idx]
         end
-        $weights.each { |w| w /= sum }
+        #normalize
+        $weights.map! { |w| w / sum }
 
     end
+
+    #ensemble
+    $ensemble = Array.new($training.size) 
+    $ensemble.each_index do |i|
+        x = 0
+        (1..count).each do |c|
+            if $predictions[c][i][1] == 1
+                x += 1
+            end
+        end
+        if x >= count / 2
+            $ensemble[i] = 1
+        else
+            $ensemble[i] = 0
+        end
+    end
+
+    right = 0
+    fp, fn = 0, 0
+    $ensemble.each_index do |i|
+        x = $predictions[1][i][0] <=> $ensemble[i]
+        if x == 0
+            right += 1
+        elsif x < 0
+            fp += 1
+        else
+            fn += 1
+        end
+    end
+
+    puts "Accuracy (#{count}): #{right.to_f / $training.size} [#{fp}:#{fn}]"
 
 end
