@@ -40,56 +40,56 @@ $trainAcc = Array.new
 
 #run with only a fraction of the training data
 (0.1..1).step(0.1) do |n|
-    use = Array.new
+    (1..10).each do |i|
+        use = Array.new
 
-    $training.each do |k,v|
-        (0..(v.size * n - 1)).each do |x|
-            use << v[x]
+        $training.each do |k,v|
+            (0..(v.size * n - 1)).each do |x|
+                use << v[x]
+            end
         end
-    end
 
-    puts "N: #{n * 100}% (#{use.size})"
 
-    File.open('kfold.data', 'w') do |file|
-        use.each do |t|
-            file.write(t.join(','))
-            file.write("\n")
+        File.open('kfold.data', 'w') do |file|
+            use.each do |t|
+                file.write(t.join(','))
+                file.write("\n")
+            end
         end
-    end
 
-    File.open('kfold.test', 'w') do |file|
-        $validation.each do |v|
-            file.write(v.join(','))
-            file.write("\n")
+        File.open('kfold.test', 'w') do |file|
+            $validation.each do |v|
+                file.write(v.join(','))
+                file.write("\n")
+            end
         end
+
+        `c4.5 -f kfold -u`
+
+        File.open('kfold.trainacc').readlines.each do |acc|
+            $trainAcc << acc.to_f
+        end
+
+        File.open('kfold.testacc').readlines.each do |acc|
+            $testAcc << acc.to_f
+        end
+
     end
 
-    `c4.5 -f kfold -u`
-    
-    File.open('kfold.trainacc').readlines.each do |acc|
-        puts acc
-        $trainAcc << acc.to_f
-    end
+    sum = 0
+    $testAcc.map {|t| sum += t}
+    avgTest = sum / $testAcc.size
 
-    File.open('kfold.testacc').readlines.each do |acc|
-        puts acc
-        $testAcc << acc.to_f
-    end
+    sum = 0
+    $trainAcc.map {|t| sum += t}
+    avgTrain = sum / $trainAcc.size
+
+    puts
+    puts "### Summary ###"
+    puts "N: #{n * 100}%"
+    puts
+    puts "Average Training Accuracy: #{avgTrain.to_s}"
+    puts "Average Testing Accuracy: #{avgTest.to_s}"
     puts
 
 end
-
-sum = 0
-$testAcc.map {|t| sum += t}
-avgTest = sum / $testAcc.size
-
-sum = 0
-$trainAcc.map {|t| sum += t}
-avgTrain = sum / $trainAcc.size
-
-puts
-puts "### Summary ###"
-puts
-puts "Average Training Accuracy: #{avgTrain.to_s}"
-puts "Average Testing Accuracy: #{avgTest.to_s}"
-puts

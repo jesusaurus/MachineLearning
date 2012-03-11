@@ -35,16 +35,16 @@ end
             end
         end
 
-        File.open("ada#{n}.data", 'w') do |file|
+        File.open("ada.data", 'w') do |file|
             use.each do |t|
                 file.write(t.join(','))
                 file.write("\n")
             end
         end
 
-        puts `c4.5 -f ada#{n} -u | tail -n 23`
+        puts `c4.5 -f ada -u | tail -n 23`
 
-        File.open("ada#{n}.predictions").readlines.each do |pred|
+        File.open("ada.predictions").readlines.each do |pred|
             $predictions[n] << pred.chomp.split.map(&:to_i)
         end
         $predictions[n].shift.compact #ignore the first line
