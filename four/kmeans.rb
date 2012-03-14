@@ -13,7 +13,8 @@ Limit = 0.05
 #read training data from file
 data = Array.new
 File.open("wine.train").readlines.each do |line|
-    l = line.chomp.split(',').map(&:to_f).shift
+    l = line.chomp.split(',').map(&:to_f)
+    l.shift
     data << l
 end
 trans = data.transpose
@@ -25,7 +26,7 @@ center = Array.new(K)
 center.each_index do |i|
     min = trans[i].min
     max = trans[i].max
-    center[i] = Array.new(tmp.size) { |x| rand * (max - min) + min }
+    center[i] = Array.new(data[i].size) { |x| rand * (max - min) + min }
 end
 
 #we will be doing this often
@@ -42,13 +43,13 @@ stable = false
 until stable
 
     #somewhere to sort the data into
-    cluster = Array.new(K)
+    cluster = Array.new(K) {|a| Array.new }
 
     #calculate distances, sorting each point into a cluster
     data.each do |datum|
         d = Array.new(K)
         center.each_index do |i|
-            d[i] = distance(datum,c[i]).abs
+            d[i] = (distance(datum,center[i])).abs
         end
         cluster[d.index(d.min)] << datum
     end
@@ -59,7 +60,11 @@ until stable
         center[n].each_index do |i|
             sum = 0
             cluster[n].each {|x| sum += x[i]}
-            avg = sum / cluster[n].size
+            if cluster[n].size == 0
+                avg = 0
+            else
+                avg = sum / cluster[n].size
+            end
             newcenter[n][i] = avg
         end
     end
