@@ -19,7 +19,14 @@ File.open("wine.train").readlines.each do |line|
 end
 trans = data.transpose
 
-#TODO: normalize data
+#normalize data
+trans.each do |t|
+    min = t.min
+    max = t.max
+    t.map! {|x| (x - min) / (max - min)}
+end
+data = trans.transpose
+
 
 #initialize K random cluster centers
 center = Array.new(K)
@@ -55,16 +62,12 @@ until stable
     end
 
     #calculate the new centers
-    newcenter = center
-    center.each_index do |n|
-        center[n].each_index do |i|
+    newcenter = Marshal.load( Marshal.dump(center) ) #deep copy
+    newcenter.each_index do |n|
+        newcenter[n].each_index do |i|
             sum = 0
             cluster[n].each {|x| sum += x[i]}
-            if cluster[n].size == 0
-                avg = 0
-            else
-                avg = sum / cluster[n].size
-            end
+            avg = sum / newcenter[n].size
             newcenter[n][i] = avg
         end
     end
@@ -72,12 +75,14 @@ until stable
     #determine how much we've changed
     stable = true
     newcenter.each_index do |i|
-        if distance(center[i], newcenter[i]).abs > Limit
+        d = distance(center[i], newcenter[i]).abs
+        puts d
+        if d > Limit
             stable = false
         end
     end
 
     #update the cluster centers
-    center = newcenter
+    center = Marshal.load( Marshal.dump(newcenter) )
 
 end
