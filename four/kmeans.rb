@@ -70,16 +70,22 @@ stable = false
         end
         #add the vector to the cluster of the closest center
         cluster[d.index(d.min)] << point[1]
+
     end
 
     #calculate the new centers
     newcenter = Marshal.load( Marshal.dump(center) ) #deep copy
-    newcenter.each_index do |n|
-        newcenter[n].each_index do |i|
+    newcenter.each_index do |k|
+        trans = cluster[k].transpose
+        newcenter[k].each_index do |i|
             sum = 0
-            cluster[n].each {|x| sum += x[i]}
-            avg = sum / newcenter[n].size
-            newcenter[n][i] = avg
+            trans[i].each { |t| sum += t }
+            avg = sum.to_f / trans[i].size
+            puts avg
+            puts newcenter[k][i]
+            newcenter[k][i] = avg
+            puts newcenter[k][i]
+            puts
         end
     end
 
@@ -87,40 +93,42 @@ stable = false
     stable = true
     newcenter.each_index do |i|
         d = distance(center[i], newcenter[i]).abs
-        puts d
         if d > Limit
             stable = false
         end
     end
 
     #update the cluster centers
-    center = Marshal.load( Marshal.dump(newcenter) )
+    center = newcenter
 
 end
 
 #the actual classes of the points associated with center[x]
 #are in the array classes[x][]
-classes = Hash.new
+classes = Array.new(K) { Array.new }
 data.each do |point|
     dis = Array.new(K)
     center.each_index do |i|
-        #distance from this center to the point
-        dis[i] = (distance(point[1],center[i])).abs
+        #distance from this center to the point vector
+        dis[i] = (distance(point[1], center[i])).abs
     end
+
+    puts dis.inspect
+
     #minimum distance == closest center
     closest = dis.index(dis.min)
-    if classes[closest].nil?
-        classes[closest] = Array.new
-    end
+    
     #add the point's class to classes of the closest center
     classes[closest] << point[0]
 end
+
+puts classes.inspect
 
 #center[x] defines class map[x]
 map = Array.new(K)
 
 #find the mode of classes
-classes.each_index do |k|
+classes.each do |k|
     count = Array.new(K) {0}
     classes[k].each { |x| count[x] += 1 }
     map[k] = count.index(count.max)
@@ -138,3 +146,33 @@ File.open('wine.test').readlines.each do |line|
 end
 
 
+#somewhere to sort the data into
+cluster = Array.new(K) {|a| Array.new }
+
+#calculate distances, sorting each point into a cluster
+test.each do |point| #point[0] is the class, point[1] is the vector
+    d = Array.new(K)
+    center.each_index do |k|
+        #the distance from the k-th center to the point's vector
+        d[k] = (distance(point[1],center[k])).abs
+    end
+    #add the class to the cluster of the closest center
+    cluster[d.index(d.min)] << point[0]
+end
+
+puts cluster.inspect
+
+#calculate the accuracy
+right = 0
+wrong = 0
+cluster.each_index do |k|
+    cluster[k].each do |c|
+        if c == map[k]
+            right += 1
+        else
+            wrong += 1
+        end
+    end
+end
+
+puts "Accuracy: #{right / (right + wrong).to_f}"
