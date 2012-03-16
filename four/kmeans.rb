@@ -5,7 +5,7 @@
 # License:  New BSD
 
 #number of clusters
-K = 3
+K = 8
 
 #stop training if all centers move less than the limit
 Limit = 0.05
@@ -166,7 +166,7 @@ test.each do |point| #point[0] is the class, point[1] is the vector
     end
     #add the class to the cluster of the closest center
     nearest = d.index(d.min)
-    cluster[nearest] << point[0]
+    cluster[nearest] << point
 end
 
 #calculate the accuracy
@@ -174,7 +174,7 @@ right = 0
 wrong = 0
 cluster.each_index do |k|
     cluster[k].each do |c|
-        if c == map[k]
+        if c[0] == map[k]
             right += 1
         else
             wrong += 1
@@ -183,3 +183,39 @@ cluster.each_index do |k|
 end
 
 puts "Accuracy: #{right / (right + wrong).to_f}"
+
+#calculate cohesion
+cohesion = Array.new
+cluster.each do |c|
+    if c.transpose[1].nil?
+        next 
+    end
+    arry = c.transpose[1].combination(2).map {|x| distance(x[0],x[1]) }
+    sum = 0
+    arry.each {|n| sum += n}
+    cohesion << 1.0 / (sum / arry.size)
+end
+sum = 0
+cohesion.each {|c| sum += c}
+avg = sum / cohesion.size
+puts "Average Cohesion: #{avg}"
+
+#calculate separation
+separation = Array.new
+cluster.combination(2).each do |c|
+    if c[0].transpose[1].nil?
+        next
+    elsif c[1].transpose[1].nil?
+        next
+    end
+    #zip the 2 clusters together, and take the distance of each pair of features
+    arry = c[0].transpose[1].product(c[1].transpose[1]).map {|n| distance(n[0], n[1]) }
+    #take the average and we have a separation
+    sum = 0
+    arry.each {|n| sum += n}
+    separation << sum.to_f / arry.size
+end
+sum = 0
+separation.each {|s| sum += s }
+avg = sum / separation.size
+puts "Average Separation: #{avg}"
