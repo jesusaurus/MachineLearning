@@ -12,10 +12,10 @@ Limit = 0.05
 
 #read training data from file
 data = Array.new
-File.open("wine.train").readlines.each do |line|
+File.open("wine.test").readlines.each do |line|
     l = line.chomp.split(',').map(&:to_f)
     d = Array.new
-    d << l.shift
+    d << l.shift.to_i
     d << l
     #d is an array of [class, vector] where vector is an array of features
     data << d
@@ -55,8 +55,8 @@ def distance(vector1, vector2)
 end
 
 stable = false
-#until stable
-(1..10).each do |_| #10 is more than enough
+until stable
+#(1..10).each do |_| #10 is more than enough
 
     #somewhere to sort the data into
     cluster = Array.new(K) {|a| Array.new }
@@ -70,22 +70,20 @@ stable = false
         end
         #add the vector to the cluster of the closest center
         cluster[d.index(d.min)] << point[1]
-
     end
 
     #calculate the new centers
     newcenter = Marshal.load( Marshal.dump(center) ) #deep copy
     newcenter.each_index do |k|
+        if cluster[k].size == 0
+            next #skip empty clusters
+        end
         trans = cluster[k].transpose
         newcenter[k].each_index do |i|
             sum = 0
             trans[i].each { |t| sum += t }
             avg = sum.to_f / trans[i].size
-            puts avg
-            puts newcenter[k][i]
             newcenter[k][i] = avg
-            puts newcenter[k][i]
-            puts
         end
     end
 
@@ -99,7 +97,7 @@ stable = false
     end
 
     #update the cluster centers
-    center = newcenter
+    center = Marshal.load( Marshal.dump(newcenter) )
 
 end
 
@@ -113,8 +111,6 @@ data.each do |point|
         dis[i] = (distance(point[1], center[i])).abs
     end
 
-    puts dis.inspect
-
     #minimum distance == closest center
     closest = dis.index(dis.min)
     
@@ -122,16 +118,14 @@ data.each do |point|
     classes[closest] << point[0]
 end
 
-puts classes.inspect
-
 #center[x] defines class map[x]
 map = Array.new(K)
 
 #find the mode of classes
-classes.each do |k|
+classes.each_index do |k|
     count = Array.new(K) {0}
-    classes[k].each { |x| count[x] += 1 }
-    map[k] = count.index(count.max)
+    classes[k].each { |c| count[c-1] += 1 }
+    map[k] = count.index(count.max) + 1
 end
 
 #read in the test data
@@ -139,12 +133,26 @@ test = Array.new
 File.open('wine.test').readlines.each do |line|
     l = line.chomp.split(',').map(&:to_f)
     t = Array.new
-    t << l.shift
+    t << l.shift.to_i
     t << l
     #t is an array of [class, vector] where vector is an array of features
     test << t
 end
 
+#prepare to normalize
+test = test.transpose
+trans = test[1].transpose
+
+#normalize test
+trans.each do |t|
+    min = t.min
+    max = t.max
+    t.map! {|x| (x - min) / (max - min)}
+end
+
+#untransform our test data
+test[1] = trans.transpose
+test = test.transpose
 
 #somewhere to sort the data into
 cluster = Array.new(K) {|a| Array.new }
@@ -154,13 +162,12 @@ test.each do |point| #point[0] is the class, point[1] is the vector
     d = Array.new(K)
     center.each_index do |k|
         #the distance from the k-th center to the point's vector
-        d[k] = (distance(point[1],center[k])).abs
+        d[k] = (distance(point[1], center[k])).abs
     end
     #add the class to the cluster of the closest center
-    cluster[d.index(d.min)] << point[0]
+    nearest = d.index(d.min)
+    cluster[nearest] << point[0]
 end
-
-puts cluster.inspect
 
 #calculate the accuracy
 right = 0
